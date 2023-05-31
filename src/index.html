@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="index.css">
+  <title>Document</title>
+</head>
+
+<body>
+ 
+  <div class="d-flex justify-content-center row">
+  <div class="col-8 d-flex justify-content-end mb-4 mt-4">   <!-- Botón que activa el modal -->
+    <button type="button" class="btn btn-primary " id="openModalBtn">
+      Agregar Proveedor
+    </button></div>
+    <div class="col-8">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Artículos</th>
+            <th>Telefono</th>
+            <th>Email</th>
+            <th>Precio</th>
+            <th>Iva</th>
+
+          </tr>
+        </thead>
+        <tbody id="proveedorTabla">
+        </tbody>
+    
+      </table>
+    </div>
+  </div>
+
+  
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Formulario del proveedor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario aquí -->
+          <form id="formProveedor">
+            <div class="form-group">
+              <label for="nombre">Nombre del proveedor:</label>
+              <input type="text" class="form-control" id="nombre" required>
+              <div class="invalid-feedback">Este campo es requerido.</div>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Precio:</label>
+              <input type="number" class="form-control" id="precio" required>
+              <div class="invalid-feedback">Este campo es requerido.</div>
+            </div>
+
+            <h2>
+              Agregar Producto
+            </h2>
+            <button type="button" class="btn btn-primary mt-2" id="addProductoColapso">
+              Desplegar formulario de productos
+            </button>
+            <div class="collapse" id="productoFormCollapse">
+
+              <div class="producto-form-group">
+                <label for="name">Nombre:</label>
+                <input type="text" id="nameProducto" name="nameProducto" required>
+                <div id="formNameProducto" class="invalid-feedback text-danger">Este campo es requerido.</div>
+              </div>
+              <div class="producto-form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="emailProducto" name="emailProducto" required>
+                <div id="formEmailProducto" class="invalid-feedback text-danger">Este campo es requerido.</div>
+              </div>
+              <div class="producto-form-group">
+                <label for="phone">Teléfono:</label>
+                <input type="number" id="phoneProducto" name="phoneProducto" required>
+                <div id="formPhoneProducto" class="invalid-feedback text-danger">Este campo es requerido.</div>
+              </div>
+
+              <button type="button" class="btn btn-primary mt-2 mb-2" id="agregarProductoBtn">Agregar producto</button>
+            </div>
+            <div class="form-group">
+              <table class="table table-bordered mt-4">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Correo Electrónico</th>
+                    <th>Número de Teléfono</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-productos">
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="guardarProveedorBtn">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="main.js" type="module"></script>
+</body>
+
+</html>

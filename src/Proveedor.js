@@ -26,7 +26,7 @@ export class Proveedor {
     this._precio = newPrecio;
   }
   getInfoProveedor() {
-    let articulosInfo = this._articulo.map(articulo => articulo.getInfoProveedor()).join(", ");
+    let articulosInfo = this._articulo.map(articulo => articulo.getInfoArticulo()).join(", ");
     return `Proveedor: ${this._nombre}, Artículos: ${articulosInfo}, Precio: ${this._precio}`;
   }
 }

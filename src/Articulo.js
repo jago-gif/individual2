@@ -25,7 +25,7 @@ export class Articulo {
   set telefono(newTelefono) {
     this._telefono = newTelefono;
   }
-  getInfoProveedor() {
+  getInfoArticulo() {
     return `Nombre: ${this._name}, teléfono: ${this._telefono}, Correo:  ${this._email}`
   }
 }

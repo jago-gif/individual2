@@ -122,9 +122,15 @@ function crearProveedor() {
     alert("Debe completar todos los campos del proveedor");
     return;
   }
-
-  // Crear una instancia de Proveedor con el nombre y el precio
-  let proveedor = new Proveedor(nombreProveedor, listaProductos, precioProveedor);
+  let proveedor;
+  if(listaProductos.length<1){
+    let sinArticulo = new Articulo("-","-","-")
+    precioProveedor = 0;
+    listaProductos.push(sinArticulo);
+    alert("Al crear un proveedor sin agregar al menos un artículo el proveedor cambiará el valor agregado a 0")
+  }
+  // Crear una instancia de Proveedor con el nombre y el precio 
+  proveedor = new Proveedor(nombreProveedor, listaProductos, precioProveedor);
 
   // Limpiar los campos del formulario
   document.getElementById("nombre").value = "";
@@ -157,11 +163,7 @@ function tablaProveedores() {
     // Recorrer los detalles del proveedor y crear las celdas correspondientes
     proveedorInfo.forEach(dato => {
       let celda = document.createElement("td");
-      dato = dato.replace("Proveedor: ", "");
-      dato = dato.replace("Artículos: ", "");
-      dato = dato.replace("teléfono: ", "");
-      dato = dato.replace("Correo: ", "");
-      dato = dato.replace("Precio: ", "");
+      dato = limpiarData(dato);
 
       celda.textContent = dato;
       contador++;
@@ -184,6 +186,15 @@ function calcularIva(valor) {
 let iva = valor*0.19; 
 return iva;
 
+}
+function  limpiarData(dato){
+  dato = dato.replace("Proveedor: ", "");
+  dato = dato.replace("Artículos: ", "");
+  dato = dato.replace("Nombre: ", "");
+  dato = dato.replace("teléfono: ", "");
+  dato = dato.replace("Correo: ", "");
+  dato = dato.replace("Precio: ", "");
+   return dato;
 }
 
 

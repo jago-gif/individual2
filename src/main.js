@@ -1,200 +1,139 @@
-import { Articulo } from './Articulo.js';
-import { Proveedor } from './Proveedor.js';
+import { Articulo } from "./Articulo.js"
+import { Proveedor } from "./Proveedor.js"
 
-let listaProductos = [];
-let listaProveedores = [];
-let myModal = new bootstrap.Modal(document.getElementById("myModal"));
-let colapso = new bootstrap.Collapse(document.getElementById('productoFormCollapse'));
-let bcol = false;
+const btnEmpresa = document.getElementById("btnEmpresa");
+const guardarEmpresa = document.getElementById("guardarEmpresa");
+const formularioEmpresa = document.getElementById("formularioEmpresa");
+const formularioArticulos = document.getElementById("formularioArticulos");
+const btnArticulos = document.getElementById("btnArticulos");
+const guardarArticulo = document.getElementById("guardarArticulo");
+const selectorEmpresa = document.getElementById("empresa");
+const productosProveedor = document.getElementById("productosProveedor");
+
+let proveedor;
+let Proveedores = [];
+let modalEmpresa = new bootstrap.Modal(document.getElementById("modalEmpresa"));
+let modalArticulos = new bootstrap.Modal(
+  document.getElementById("modalArticulos")
+);
 
 
-document.getElementById("addProductoColapso").addEventListener("click", function () {
-  colapso.toggle();
-  if(colapso.show()){
-    bcol = false;
-  }
 
-});
-document.getElementById("agregarProductoBtn").addEventListener("click", agregarProducto);
-document.getElementById("guardarProveedorBtn").addEventListener("click", crearProveedor);
-
-document.getElementById("openModalBtn").addEventListener("click", function () {
-  if(!bcol){
-    colapso.toggle();
-  }
-  myModal.show();
-});
-
-function agregarProducto() {
-  if (!document.getElementById("formNameProducto").classList.contains('invalid-feedback')) {
-    document.getElementById("formNameProducto").classList.add('invalid-feedback');
-  };
-  if (!document.getElementById("formEmailProducto").classList.contains('invalid-feedback')) {
-    document.getElementById("formEmailProducto").classList.add('invalid-feedback');
-  };
-  if (!document.getElementById("formPhoneProducto").classList.contains('invalid-feedback')) {
-    document.getElementById("formPhoneProducto").classList.add('invalid-feedback');
-  };
-
-  let nombre = document.getElementById("nameProducto").value;
-  let email = document.getElementById("emailProducto").value;
-  let telefono = document.getElementById("phoneProducto").value;
-  if (nombre.length === 0 || email.length === 0 || telefono.length === 0) {
-    if (nombre.length === 0) {
-      document.getElementById("formNameProducto").classList.remove('invalid-feedback');
+btnEmpresa.addEventListener("click", () => {
+    modalEmpresa.show();
+})
+btnArticulos.addEventListener("click", () => {
+    if(Proveedores.length>0){
+    selectorEmpresa.innerHTML = "";
+    Proveedores.forEach((proveedor) => {
+        selectorEmpresa.innerHTML += `<option value="${proveedor.nombre}">${proveedor.nombre}</option>`;
+    })
+    modalArticulos.show();
+    }else{
+        alert("primero debe guardar una empresa")
     }
-    if (email.length === 0) {
-      document.getElementById("formEmailProducto").classList.remove('invalid-feedback');
-    }
-    if (telefono.length === 0) {
-      document.getElementById("formPhoneProducto").classList.remove('invalid-feedback');
-    }
-    alert("Debe completar todos los campos de producto")
-    return;
+})
 
-  }
-  let articulo = new Articulo(nombre, email, telefono);
+guardarEmpresa.addEventListener("click", () => {
+    let nombre = document.getElementById("nombre").value;
+    let telefono = document.getElementById("telefono").value;
+    let email = document.getElementById("email").value;
+    proveedor = new Proveedor(nombre, telefono, email);
+    Proveedores.push(proveedor);
+    formularioEmpresa.reset();
 
-  listaProductos.push(articulo);
+    modalEmpresa.hide();
+    console.log("empresa guardada");
+    console.log(Proveedores);
+    cargarDatosProveedor();
+})
+guardarArticulo.addEventListener("click", () => {
+    let nombre = document.getElementById("nombreArticulo").value;
+    let cantidad = document.getElementById("cantidad").value;
+    cantidad = parseInt(cantidad);
+    let precio = document.getElementById("precio").value;
+    precio = parseInt(precio);
+    let proveedordesdeSelec = Proveedores.find((proveedor) => proveedor.nombre === selectorEmpresa.value);
+    let articulo = new Articulo(nombre, precio, cantidad);
 
-  document.getElementById("nameProducto").value = "";
-  document.getElementById("emailProducto").value = "";
-  document.getElementById("phoneProducto").value = "";
+    proveedordesdeSelec.articulos = articulo;
+    formularioArticulos.reset();
+    mostrarArticulos(proveedor);
+    cargarDatosProveedor();
+})
 
-  alert("Artículo agregado a la lista de productos.");
-
-  actualizarTablaProductos();
-  colapso.toggle();
+function mostrarArticulos(proveedor){
+    productosProveedor.innerHTML = "";
+    proveedor.articulos.forEach((articulo, index) => {
+        productosProveedor.innerHTML += `<tr>
+        <td>${index}</td>
+        <td>${articulo.nombre}</td>
+        <td>${articulo.cantidad}</td>
+        <td>${articulo.precio}</td>
+        </tr>`;
+    })
 }
 
 
-function actualizarTablaProductos() {
-  let tablaProductos = document.getElementById("tabla-productos");
-
-  // Limpiar la tabla antes de agregar las filas actualizadas
-  tablaProductos.innerHTML = "";
-
-  // Recorrer la lista de productos y crear las filas correspondientes
-  for (let i = 0; i < listaProductos.length; i++) {
-    let producto = listaProductos[i];
-
-    let fila = document.createElement("tr");
-
-    let nombreProducto = document.createElement("td");
-    nombreProducto.textContent = producto.name;
-
-    let correoProducto = document.createElement("td");
-    correoProducto.textContent = producto.email;
-
-    let telefonoProducto = document.createElement("td");
-    telefonoProducto.textContent = producto.telefono;
-
-    let acciones = document.createElement("td");
-
-    let botonBorrar = document.createElement("button");
-    botonBorrar.textContent = "Borrar";
-    botonBorrar.addEventListener("click", function () {
-      borrarProducto(i);
-    });
-
-    acciones.appendChild(botonBorrar);
-
-    fila.appendChild(nombreProducto);
-    fila.appendChild(correoProducto);
-    fila.appendChild(telefonoProducto);
-    fila.appendChild(acciones);
-
-    tablaProductos.appendChild(fila);
-  }
-}
-
-function borrarProducto(index) {
-  listaProductos.splice(index, 1);
-  actualizarTablaProductos();
-}
-
-function crearProveedor() {
-  let nombreProveedor = document.getElementById("nombre").value;
-  let precioProveedor = document.getElementById("precio").value;
-
-  // Validar que se haya ingresado un nombre y un precio
-  if (nombreProveedor.length === 0 || precioProveedor.length === 0) {
-    alert("Debe completar todos los campos del proveedor");
-    return;
-  }
-  let proveedor;
-  if(listaProductos.length<1){
-    let sinArticulo = new Articulo("-","-","-")
-    precioProveedor = 0;
-    listaProductos.push(sinArticulo);
-    alert("Al crear un proveedor sin agregar al menos un artículo el proveedor cambiará el valor agregado a 0")
-  }
-  // Crear una instancia de Proveedor con el nombre y el precio 
-  proveedor = new Proveedor(nombreProveedor, listaProductos, precioProveedor);
-
-  // Limpiar los campos del formulario
-  document.getElementById("nombre").value = "";
-  document.getElementById("precio").value = "";
-
-  // Agregar el proveedor a alguna lista o realizar otras acciones necesarias
-
-  // Ejemplo: Mostrar la información del proveedor en la consola
-  console.log(proveedor.getInfoProveedor());
-  listaProveedores.push(proveedor.getInfoProveedor());
-  listaProductos = [];
-
-  actualizarTablaProductos();
-  tablaProveedores();
-
-      myModal.hide();
-}
-function tablaProveedores() {
-  let tablaProveedores = document.getElementById("proveedorTabla");
-  tablaProveedores.innerHTML = "";
-  for (let i = 0; i < listaProveedores.length; i++) {
-    let proveedorInfo = listaProveedores[i].split(", ");
-    proveedorInfo.push("iva");
+selectorEmpresa.addEventListener("change", () => {
+    let proveedor = Proveedores.find(
+      (proveedor) => proveedor.nombre === selectorEmpresa.value
+    );
+    mostrarArticulos(proveedor);
+})
 
 
-    // Crear una fila para mostrar los detalles del proveedor
-    let fila = document.createElement("tr");
-    let contador = 0;
-    let datoIva = null;
-    // Recorrer los detalles del proveedor y crear las celdas correspondientes
-    proveedorInfo.forEach(dato => {
-      let celda = document.createElement("td");
-      dato = limpiarData(dato);
 
-      celda.textContent = dato;
-      contador++;
-      if (contador === 5) {
-        datoIva = parseInt(dato);
+
+/* function calcularTotal(proveedor){
+    let total = 0;
+    let proveedor = Proveedores.find(
+      (proveedor) => proveedor.nombre === selectorEmpresa.value
+    );
+        proveedor.articulos.forEach((articulo) => {
+            total += articulo.precio;
+        })
+    return total;
+} */
+function cargarDatosProveedor() {
+  let datosProv = document.getElementById("datosProveedor");
+  datosProv.innerHTML = "";
+  Proveedores.forEach((proveedor) => {
+    datosProv.innerHTML += `
+      <p class="col-10">${proveedor.getInfoProveedor()}</p> ${
+        proveedor.articulos.length > 0
+          ? `<button class="btn btn-primary col-2 totalImp" value="${proveedor.nombre}">
+              Mostrar Total Impuestos
+            </button>`
+          : ""
       }
-      if(datoIva!=null&&contador===6){
-        celda.textContent = calcularIva(datoIva);
-      }
-      fila.appendChild(celda);
+    `;
+  });
 
+  let totalImp = document.querySelectorAll(".totalImp"); 
+
+
+  totalImp.forEach((button) => {
+    button.addEventListener("click", () => {
+      const btnvalor = button.value;
+      let proveedor = Proveedores.find(
+        (proveedor) => proveedor.nombre === btnvalor
+      );
+      let total = 0;
+      let cantidad = 0;
+      proveedor.articulos.forEach((articulo) => {
+        cantidad = articulo.cantidad;
+        total += (cantidad * articulo.precio);
+      });
+      total = total * 0.19;
+      alert("El proveedor "+proveedor.nombre+" tiene un total de impuestos de: "+total);
+    
     });
-
-    // Agregar la fila a la tabla
-    tablaProveedores.appendChild(fila);
-  }
+  });
 }
 
-function calcularIva(valor) {
-let iva = valor*0.19; 
-return iva;
 
-}
-function  limpiarData(dato){
-  dato = dato.replace("Proveedor: ", "");
-  dato = dato.replace("Artículos: ", "");
-  dato = dato.replace("Nombre: ", "");
-  dato = dato.replace("teléfono: ", "");
-  dato = dato.replace("Correo: ", "");
-  dato = dato.replace("Precio: ", "");
-   return dato;
-}
+ 
+
 
 

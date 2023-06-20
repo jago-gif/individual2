@@ -1,32 +1,31 @@
 export class Articulo {
-  constructor(name, email, telefono) {
-    this._name = name;
-    this._email = email;
-    this._telefono = telefono;
+  constructor(nombre, precio, cantidad) {
+    this._nombre = nombre;
+    this._precio = precio;
+    this._cantidad = cantidad;
   }
-  // Getter y Setter para el nombre
-  get name() {
-    return this._name;
+
+  get nombre() {
+    return this._nombre;
   }
-  set name(newName) {
-    this._name = newName;
+
+  set nombre(nombre) {
+    this._nombre = nombre;
   }
-  // Getter y Setter para el email
-  get email() {
-    return this._email;
+
+  get precio() {
+    return this._precio;
   }
-  set email(newEmail) {
-    this._email = newEmail;
+
+  set precio(precio) {
+    this._precio = precio;
   }
-  // Getter y Setter para el teléfono
-  get telefono() {
-    return this._telefono;
+
+  get cantidad() {
+    return this._cantidad;
   }
-  set telefono(newTelefono) {
-    this._telefono = newTelefono;
-  }
-  getInfoArticulo() {
-    return `Nombre: ${this._name}, teléfono: ${this._telefono}, Correo:  ${this._email}`
+
+  set cantidad(cantidad) {
+    this._cantidad = cantidad;
   }
 }
-

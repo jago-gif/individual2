@@ -1,5 +1,7 @@
 import { Articulo } from "./Articulo.js"
 import { Proveedor } from "./Proveedor.js"
+import { Tipo_proveedor } from "./Tipo_proveedor.js";
+
 
 const btnEmpresa = document.getElementById("btnEmpresa");
 const guardarEmpresa = document.getElementById("guardarEmpresa");
@@ -38,7 +40,9 @@ guardarEmpresa.addEventListener("click", () => {
     let nombre = document.getElementById("nombre").value;
     let telefono = document.getElementById("telefono").value;
     let email = document.getElementById("email").value;
-    proveedor = new Proveedor(nombre, telefono, email);
+    let internacional = document.getElementById("internacional").checked;
+    let pais = document.getElementById("pais").value;
+    proveedor = new Tipo_proveedor(nombre, telefono, email,internacional, pais);
     Proveedores.push(proveedor);
     formularioEmpresa.reset();
 
@@ -58,20 +62,20 @@ guardarArticulo.addEventListener("click", () => {
 
     proveedordesdeSelec.articulos = articulo;
     formularioArticulos.reset();
-    mostrarArticulos(proveedor);
+    mostrarArticulos(proveedordesdeSelec);
     cargarDatosProveedor();
 })
 
 function mostrarArticulos(proveedor){
     productosProveedor.innerHTML = "";
     proveedor.articulos.forEach((articulo, index) => {
-        productosProveedor.innerHTML += `<tr>
+      productosProveedor.innerHTML += `<tr>
         <td>${index}</td>
         <td>${articulo.nombre}</td>
         <td>${articulo.cantidad}</td>
         <td>${articulo.precio}</td>
         </tr>`;
-    })
+    });
 }
 
 
